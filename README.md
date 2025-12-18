@@ -1,3 +1,3 @@
 # terraform-devops-levi
 
-An Plural Sight Lab, for learning IaC using Terraform on AWS/Azure
+Levi internship AWS project intended for deploying AWS and Azure resources in a fully automated way
