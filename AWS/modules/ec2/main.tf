@@ -1,7 +1,6 @@
 resource "aws_instance" "uros_ec2" {
   ami           = var.ami
   instance_type = var.instance_type
-  
 
   primary_network_interface {
     network_interface_id = aws_network_interface.uros_ENI.id
@@ -13,9 +12,25 @@ resource "aws_instance" "uros_ec2" {
   #   device_index = 0
   # }
 
+  key_name = var.key_pair_name
+  #user_data = var.user_data
+
+  # Use templatefile function to read the script and pass variables
+  user_data = templatefile("${path.module}/../../automate.sh", {
+    server_name = var.server_name
+   })
+
+  user_data_replace_on_change = true
+
   tags = {
-    Name = "urosEC2instance"
+    Name = var.server_name
   }
+}
+
+# Napraviti tako da ovaj public kljuc smestam na AWS SMS i da ne bude hardcodovano, i napravim role gde kacim policy za servis EC2.
+resource "aws_key_pair" "deployer" {
+  key_name   = var.key_pair_name #"deployer-key"
+  public_key = var.public_key 
 }
 
 resource "aws_network_interface" "uros_ENI" {
@@ -26,6 +41,12 @@ resource "aws_network_interface" "uros_ENI" {
 #     instance     = module.ec2.uros_ec2.id
 #     device_index = 1
 #   }
+}
+
+resource "aws_eip" "uros_EIP" {
+  network_interface = aws_network_interface.uros_ENI.id
+  domain   = "vpc"
+  depends_on = [ aws_instance.uros_ec2 ]
 }
 
 # resource "aws_network_interface_attachment" "this" {

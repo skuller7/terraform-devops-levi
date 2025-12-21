@@ -78,6 +78,13 @@ resource "aws_security_group" "uros_SG" {
     description = "allow incoming HTTP traffic to enter"
   }
 
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   tags = {
     Name = "uros_SG"
   }
