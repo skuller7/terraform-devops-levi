@@ -1,0 +1,22 @@
+# su - root
+# mkdir /etc/ansible/playbooks
+# cd /etc/ansible/playbooks
+# vim first.yml
+
+---
+- name: Installing and Running apache2
+  hosts: web
+  become: true
+
+  tasks:
+  - name: Install apache
+    ansible.builtin.yum:
+     name: httpd
+     state: present
+     update_cache: true
+
+  - name: Start apache2
+    service:
+     name: httpd
+     state: started
+     enabled: true

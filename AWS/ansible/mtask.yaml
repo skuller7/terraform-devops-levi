@@ -1,0 +1,15 @@
+# su - root
+# mkdir /etc/ansible/playbooks
+# cd /etc/ansible/playbooks
+# vim first.yml
+
+---
+- name: "My first playbook, running new task"
+  hosts: localhost
+
+  tasks:
+  - name: "test connectivity"
+    ping:
+
+  - name: "print hello world"
+    debug: msg="Hello World"
