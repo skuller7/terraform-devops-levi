@@ -32,5 +32,5 @@ resource "aws_route53_record" "openvpn" {
   name = var.openvpn_recond_name
   type = "A"
   ttl = 300
-  records = ["57.129.100.83"]
+  records = ["$IP"]
 }
